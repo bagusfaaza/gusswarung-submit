@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -8,87 +9,114 @@ use Illuminate\Support\Facades\Auth;
 
 class SesiController extends Controller
 {
+    /**
+     * Menampilkan halaman login.
+     */
     function index()
     {
         return view('login');
     }
 
+    /**
+     * Menampilkan halaman register.
+     */
     function formRegister()
     {
         return view('register');
     }
 
+    /**
+     * Memproses permintaan login.
+     */
     function login(Request $request)
     {
+        // 1. Validasi input
         $request->validate(
             [
                 'email' => 'required',
                 'password' => 'required'
             ],
             [
-                'email.required' => 'email wajid disi',
-                'password.required' => 'password wajid disi',
+                'email.required' => 'Email wajib diisi',
+                'password.required' => 'Password wajib diisi',
             ]
         );
 
-        $email = $request->email;
-        $password = $request->password;
-
-        // data untuk login
+        // 2. Data untuk otentikasi
         $infologin = [
-            'email' => $email,
-            'password' => $password,
+            'email' => $request->email,
+            'password' => $request->password,
         ];
 
+        // 3. Coba otentikasi
         if (Auth::attempt($infologin)) {
 
-            // setelah login berhasil, baru ambil email dari database
-            $email = Auth::user()->email;
+            // Otentikasi Berhasil
 
-            if (str_ends_with($email, '@admin.com')) {
+            // Ambil data user yang baru login
+            $user = Auth::user();
+
+            // Tentukan jalur redirect berdasarkan kolom 'role'
+            if ($user->role === 'admin') {
                 return redirect('/admin');
 
-            } else if (str_ends_with($email, '@user.com')) {
+            } else if ($user->role === 'user') {
                 return redirect('/user');
 
-            } else {
+            } else if ($user->role === 'driver') {
                 return redirect('/driver');
+
+            } else {
+                // Default redirect jika role tidak dikenali
+                return redirect('/dashboard');
             }
 
         } else {
-            return redirect('')
+
+            // Otentikasi Gagal
+
+            // PERBAIKAN: Menggunakan helper redirect() tanpa parameter
+            return redirect()
                 ->back()
-                ->withErrors('username dan password salah')
+                ->withErrors('Email dan Password yang dimasukkan salah')
                 ->withInput();
         }
 
     }
 
+    /**
+     * Memproses logout user.
+     */
     function logout(Request $request)
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
+
+        // Arahkan ke route login yang bernama 'login'
         return redirect()->route('login');
     }
 
-    // REGISTER ACTION
+    /**
+     * Memproses registrasi user baru.
+     */
     public function register(Request $request)
     {
         $request->validate([
             'name' => 'required|min:3',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
-            'role' => 'required|in:admin,user,driver',
+            'role' => 'required|in:admin,user,driver', // Pastikan role hanya salah satu dari ini
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password),
+            // Simpan password yang sudah di-hash
+            'password' => Hash::make($request->password),
             'role' => $request->role,
         ]);
 
-        return redirect()->route('login')->with('success', 'Akun berhasil dibuat!');
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silahkan login.');
     }
 }

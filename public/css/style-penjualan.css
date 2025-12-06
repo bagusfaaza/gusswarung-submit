@@ -1,0 +1,338 @@
+       body {
+            font-family: "Poppins", sans-serif;
+        }
+
+        h1,
+        h2,
+        h3,
+        .navbar-brand {
+            font-family: "Playfair Display", serif;
+        }
+
+        /* Efek zoom gambar ketika hover */
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            /* sejajarkan logo dan teks di tengah vertikal */
+            gap: 10px;
+            /* beri jarak kecil antara logo dan teks */
+        }
+
+        .navbar-brand img {
+            display: inline-block;
+            vertical-align: middle;
+            /* pastikan logo ikut rata tengah */
+            margin-bottom: 0 !important;
+            /* hilangkan offset bawah */
+        }
+
+        .card-img-top {
+            transition: transform 0.4s ease;
+            object-fit: cover;
+            height: 180px;
+            /* Tinggi gambar serasi untuk makanan */
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.08);
+        }
+
+        /* Rating bintang */
+
+        .rating {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        /* Animasi halus muncul */
+
+        .card {
+            overflow: hidden;
+            position: relative;
+            border-radius: 12px;
+        }
+
+        .card-img-top {
+            transition: transform 0.4s ease;
+            object-fit: cover;
+            height: 180px;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .card:hover .card-img-top {
+            transform: scale(1.08);
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(255, 193, 7, 0.9);
+            /* Warna kuning transparan */
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            padding: 6px 12px;
+            border-radius: 10px;
+            backdrop-filter: blur(4px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+        }
+
+        /* Styling untuk label Stok */
+
+        .stock-info {
+            font-size: 0.9rem;
+            font-weight: bold;
+            padding: 5px 0;
+        }
+
+        .stock-ready {
+            color: #198754;
+            /* Hijau untuk Stok Cukup */
+        }
+
+        .stock-low {
+            color: #ffc107;
+            /* Kuning untuk Stok Menipis */
+        }
+
+        .stock-out {
+            color: #dc3545;
+            /* Merah untuk Stok Habis */
+        }
+
+        /* Style untuk Header Restoran */
+
+        .hero-section {
+            background: url("https://img.freepik.com/foto-gratis/pelayan-bahagia-menyajikan-makanan-kepada-sekelompok-teman-yang-ceria-di-pub_637285-12525.jpg") no-repeat center center;
+            /* Ganti dengan gambar restoran Anda */
+            background-size: cover;
+            height: 40vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            text-align: center;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            /* Overlay gelap */
+        }
+
+        .hero-content {
+            z-index: 2;
+            color: white;
+        }
+
+        /* Style tambahan untuk carousel minuman agar tampil horizontal */
+
+        .carousel-item-drinks {
+            /* Pastikan card minuman memiliki tinggi yang sama dengan card makanan */
+            height: 100%;
+        }
+
+        .carousel-inner .col-md-4 {
+            /* Untuk menampilkan 3 item per slide, kita perlu mengontrol lebar item di dalam inner*/
+            display: inline-block;
+            float: left;
+        }
+
+        /* Custom styling for carousel height */
+
+        .drink-carousel-container {
+            max-width: 900px;
+            /* Batasi lebar carousel agar tidak terlalu besar */
+            margin: 0 auto;
+        }
+
+        .drink-card .card-img-top {
+            height: 220px;
+            /* Tinggi gambar sedikit lebih besar untuk minuman di carousel */
+        }
+
+        .divider {
+            width: 120px;
+            height: 4px;
+            margin: 0 auto;
+            border-radius: 2px;
+            background: linear-gradient(to right,
+                    transparent,
+                    #ffc107,
+                    transparent);
+        }
+
+        #searchResults {
+            display: none;
+            /* ⛔ awalnya disembunyikan */
+            background: #ffd876;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .search-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            transition: background 0.2s;
+        }
+
+        .search-item:hover {
+            background: #ffc107;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .search-item img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .search-item h6 {
+            margin: 0;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-item p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #ff0000;
+        }
+
+        .nav-link.active {
+            color: #fff !important;
+            background-color: #e9de08;
+            border-radius: 10px;
+            padding: 8px 16px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        /* Tombol keranjang melayang */
+        .floating-cart {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #ffc107;
+            color: #fff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            z-index: 1050;
+            /* di atas elemen lain */
+        }
+
+        .floating-cart:hover {
+            background-color: #e0aa00;
+            transform: scale(1.08);
+        }
+
+        /* Badge jumlah item */
+        .cart-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            border-radius: 50%;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 3px 6px;
+            line-height: 1;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Styling Harga Diskon */
+.price-group {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    min-height: 24px; /* Agar layout tidak bergeser saat diskon hilang */
+}
+
+.original-price {
+    color: #999;
+    font-weight: 400;
+    font-size: 0.9rem;
+    text-decoration: line-through; /* Efek Coret */
+    margin-right: 8px;
+    opacity: 0.8;
+}
+
+.discount-price {
+    font-weight: bold;
+    color: #dc3545; /* Merah untuk harga diskon */
+    font-size: 1.1rem;
+}
+
+.discount-badge {
+    background: #dc3545; /* Merah untuk badge */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 3px 6px;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+/* Styling untuk Modal Quick Edit Items */
+.quick-edit-item-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px 0;
+    border-bottom: 1px dashed #eee;
+}
+.quick-edit-item-row:last-child {
+    border-bottom: none;
+}
+.quick-edit-item-row img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+.quick-edit-controls {
+    display: flex;
+    align-items: center;
+}
+.quick-edit-controls button {
+    padding: 0 8px;
+    font-size: 1rem;
+    height: 30px;
+    width: 30px;
+    line-height: 1;
+    border-radius: 6px;
+}
+.quick-edit-controls .qty-display {
+    padding: 0 10px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+}
+.quick-edit-item-price {
+    font-weight: bold;
+    color: #dc3545; /* Merah atau warna diskon */
+}

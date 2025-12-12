@@ -95,5 +95,5 @@ Route::middleware(['user'])->group(function () {
 | ... (Tidak berubah)
 */
 Route::get('/about', function () {
-    return view('about');
+    return view('userabout');
 });

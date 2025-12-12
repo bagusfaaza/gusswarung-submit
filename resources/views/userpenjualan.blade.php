@@ -311,18 +311,41 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="material-symbols-outlined align-middle">account_circle</span>
+
+                            {{-- ICON ACCOUNT CIRCLE DULU --}}
+                            <span class="material-symbols-outlined align-middle me-1">account_circle</span>
+
+                            @auth
+                                {{-- NAMA PENGGUNA SETELAH IKON --}}
+                                <span class="align-middle fw-bold me-1">{{ Auth::user()->name }}</span>
+                            @endauth
+
                         </a>
                         <ul class="dropdown-menu bg-warning">
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="/setting">Pengaturan</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger bg-warning" href="logout">Keluar</a>
-                            </li>
+                            {{-- Dropdown Menu (Tidak perlu diubah) --}}
+                            @auth
+                                <li>
+                                    <span class="dropdown-item text-white bg-warning fw-bold border-bottom mb-2">
+                                        Masuk sebagai: {{ Auth::user()->name }}
+                                    </span>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="/setting">
+                                        Pengaturan
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger bg-warning" href="{{ route('logout') }}">Keluar</a>
+                                </li>
+                            @else
+                                <li><a class="dropdown-item text-black bg-warning" href="{{ route('login') }}">Login</a>
+                                </li>
+                                <li><a class="dropdown-item text-black bg-warning"
+                                        href="{{ route('register') }}">Register</a></li>
+                            @endauth
                         </ul>
                     </li>
                 </ul>

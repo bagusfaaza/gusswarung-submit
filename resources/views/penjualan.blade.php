@@ -1,3 +1,20 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    use App\Models\Order;
+    use Illuminate\Support\Str; // Tambahkan ini untuk menggunakan Str::contains
+
+    // 1. Logika Pengambilan Data Pesanan di View
+    $latestOrders = collect();
+    $userName = Auth::check() ? Auth::user()->name : null;
+
+    if (Auth::check()) {
+        // Ambil 5 pesanan terbaru milik user yang sedang login
+        $latestOrders = Order::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,7 +70,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="/">Home</a>
+                        <a class="nav-link text-black" href="/user">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black active" href="/sell">Penjualan</a>
@@ -70,18 +87,75 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="material-symbols-outlined align-middle">account_circle</span>
+
+                            {{-- ICON ACCOUNT CIRCLE DULU --}}
+                            <span class="material-symbols-outlined align-middle me-1">account_circle</span>
+
+                            @auth
+                                {{-- NAMA PENGGUNA SETELAH IKON --}}
+                                <span class="align-middle fw-bold me-1">{{ Auth::user()->name }}</span>
+                            @endauth
+
                         </a>
                         <ul class="dropdown-menu bg-warning">
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="/setting">Pengaturan</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger bg-warning" href="#">Keluar</a>
-                            </li>
+                            {{-- Dropdown Menu (Tidak perlu diubah) --}}
+                            @auth
+                                <li>
+                                    <span class="dropdown-item text-white bg-warning fw-bold border-bottom mb-2">
+                                        Masuk sebagai: {{ Auth::user()->name }}
+                                    </span>
+                                </li>
+
+                                {{-- FITUR BARU: STATUS PESANAN TERBARU --}}
+                                <li>
+                                    <h6 class="dropdown-header">Status Pesanan Terbaru</h6>
+                                </li>
+
+                                @forelse($latestOrders as $order)
+                                    <li>
+                                        {{-- PENTING: Untuk sementara diarahkan ke route Admin, idealnya perlu route User order
+                                        show --}}
+                                        <a class="dropdown-item small" href="{{ route('admin.orders.show', $order->id) }}"
+                                            style="line-height: 1.2;">
+                                            Pesanan #{{ $order->id }} ({{ $order->created_at->format('d/m') }})
+                                            <br>
+                                            <span class="fw-bold 
+                                                                                        @if ($order->status == 'Lunas') text-success 
+                                                                                        @elseif ($order->status == 'Dibatalkan') text-danger 
+                                                                                        @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Baru (Menunggu Konfirmasi)') text-info 
+                                                                                        @else text-primary 
+                                                                                        @endif">
+                                                Status: {{ $order->status }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li>
+                                        <span class="dropdown-item text-muted">Belum ada pesanan terbaru.</span>
+                                    </li>
+                                @endforelse
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="/setting">
+                                        Pengaturan
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger bg-warning" href="{{ route('logout') }}">Keluar</a>
+                                </li>
+                            @else
+                                <li><a class="dropdown-item text-black bg-warning" href="{{ route('login') }}">Login</a>
+                                </li>
+                                <li><a class="dropdown-item text-black bg-warning"
+                                        href="{{ route('register') }}">Register</a></li>
+                            @endauth
                         </ul>
                     </li>
                 </ul>
@@ -187,14 +261,14 @@
 
                             <button class="btn btn-warning text-white w-100" @if($menu->stok == 0) disabled @endif
                                 onclick="addToCart({
-                                                                                                                                                                                            id: {{ $menu->id }},
-                                                                                                                                                                                                name: '{{ $menu->nama }}',
-                                                                                                                                                                                                price: {{ round($harga_diskon) }}, 
-                                                                                                                                                                                                image: '{{ asset($menu->gambar) }}',
-                                                                                                                                                                                                unit: 'Porsi', 
-                                                                                                                                                                                                stok: {{ $menu->stok }},
-                                                                                                                                                                                                diskon: {{ $diskon }}
-                                                                                                                                                                                                                            })">
+                                                                                                                                                                                                                        id: {{ $menu->id }},
+                                                                                                                                                                                                                            name: '{{ $menu->nama }}',
+                                                                                                                                                                                                                            price: {{ round($harga_diskon) }}, 
+                                                                                                                                                                                                                            image: '{{ asset($menu->gambar) }}',
+                                                                                                                                                                                                                            unit: 'Porsi', 
+                                                                                                                                                                                                                            stok: {{ $menu->stok }},
+                                                                                                                                                                                                                            diskon: {{ $diskon }}
+                                                                                                                                                                                                                                                        })">
                                 <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang
                             </button>
                         </div>
@@ -264,14 +338,14 @@
                             </div>
 
                             <button class="btn btn-warning text-white w-100" @if($menu->stok == 0) disabled @endif onclick="addToCart({
-                                                                            id: {{ $menu->id }},
-                                                                            name: '{{ $menu->nama }}',
-                                                                            price: {{ round($harga_diskon) }},
-                                                                            image: '{{ asset($menu->gambar) }}',
-                                                                            unit: 'Unit',
-                                                                            stok: {{ $menu->stok }},
-                                                                            diskon: {{ $diskon }}
-                                                                        })">
+                                                                                                        id: {{ $menu->id }},
+                                                                                                        name: '{{ $menu->nama }}',
+                                                                                                        price: {{ round($harga_diskon) }},
+                                                                                                        image: '{{ asset($menu->gambar) }}',
+                                                                                                        unit: 'Unit',
+                                                                                                        stok: {{ $menu->stok }},
+                                                                                                        diskon: {{ $diskon }}
+                                                                                                    })">
                                 <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang
                             </button>
                         </div>
@@ -342,14 +416,14 @@
                             </div>
 
                             <button class="btn btn-warning text-white w-100" @if($menu->stok == 0) disabled @endif onclick="addToCart({
-                                                id: {{ $menu->id }},
-                                                name: '{{ $menu->nama }}',
-                                                price: {{ round($harga_diskon) }},
-                                                image: '{{ asset($menu->gambar) }}',
-                                                unit: 'Porsi',
-                                                stok: {{ $menu->stok }},
-                                                diskon: {{ $diskon }}
-                                            })">
+                                                                            id: {{ $menu->id }},
+                                                                            name: '{{ $menu->nama }}',
+                                                                            price: {{ round($harga_diskon) }},
+                                                                            image: '{{ asset($menu->gambar) }}',
+                                                                            unit: 'Porsi',
+                                                                            stok: {{ $menu->stok }},
+                                                                            diskon: {{ $diskon }}
+                                                                        })">
                                 <i class="bi bi-cart-plus me-2"></i> Tambah ke Keranjang
                             </button>
                         </div>

@@ -1,3 +1,20 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    use App\Models\Order;
+    use Illuminate\Support\Str; // Tambahkan ini untuk menggunakan Str::contains
+
+    // 1. Logika Pengambilan Data Pesanan di View
+    $latestOrders = collect();
+    $userName = Auth::check() ? Auth::user()->name : null;
+
+    if (Auth::check()) {
+        // Ambil 5 pesanan terbaru milik user yang sedang login
+        $latestOrders = Order::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 
@@ -8,7 +25,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <!-- AOS Animation -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -20,17 +36,16 @@
 
         /* ===== Navbar ===== */
         .navbar {
-            background-color: #4d3d3d;
+            background-color: #ffc107 !important;
+            /* Diubah agar konsisten dengan navbar lain */
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
-        /* Warna teks link navbar jadi hitam */
         .navbar .nav-link,
         .navbar .dropdown-toggle {
             color: #000 !important;
         }
 
-        /* Warna teks brand (judul/logo) tetap putih */
         .navbar-brand {
             color: #fff !important;
             font-weight: 600;
@@ -55,7 +70,6 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
-        /* ===== Section Hero ===== */
         /* ===== Section Hero ===== */
         .about-hero {
             /* gradient overlay + background image dalam satu deklarasi */
@@ -139,14 +153,12 @@
 </head>
 
 <body>
-    <!-- Navbar -->
     <nav class="fixed-top navbar navbar-expand-lg navbar-custom-shadow" style="background-color: #ffc107">
         <div class="container">
             <a class="navbar-brand text-white fw-bold" href="">
                 <img src="logo/logo_guswarung tb.png" alt="Logo" width="40" height="40" /> GusWarung
             </a>
 
-            <!-- Toggler untuk mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -154,36 +166,92 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link text-black" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-black" href="/user">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-black" href="/sell">Penjualan</a></li>
                     <li class="nav-item"><a class="nav-link text-black active" href="/about">About</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">
-                            <span class="material-symbols-outlined align-middle">account_circle</span>
+
+                            {{-- ICON ACCOUNT CIRCLE DULU --}}
+                            <span class="material-symbols-outlined align-middle me-1">account_circle</span>
+
+                            @auth
+                                {{-- NAMA PENGGUNA SETELAH IKON --}}
+                                <span class="align-middle fw-bold me-1">{{ Auth::user()->name }}</span>
+                            @endauth
+
                         </a>
                         <ul class="dropdown-menu bg-warning">
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="/setting">
-                                    Pengaturan
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger bg-warning" href="logout">Keluar</a>
-                            </li>
+                            {{-- Dropdown Menu (Tidak perlu diubah) --}}
+                            @auth
+                                <li>
+                                    <span class="dropdown-item text-white bg-warning fw-bold border-bottom mb-2">
+                                        Masuk sebagai: {{ Auth::user()->name }}
+                                    </span>
+                                </li>
+
+                                {{-- FITUR BARU: STATUS PESANAN TERBARU --}}
+                                <li>
+                                    <h6 class="dropdown-header">Status Pesanan Terbaru</h6>
+                                </li>
+
+                                @forelse($latestOrders as $order)
+                                    <li>
+                                        {{-- PENTING: Untuk sementara diarahkan ke route Admin, idealnya perlu route User order
+                                        show --}}
+                                        <a class="dropdown-item small" href="{{ route('admin.orders.show', $order->id) }}"
+                                            style="line-height: 1.2;">
+                                            Pesanan #{{ $order->id }} ({{ $order->created_at->format('d/m') }})
+                                            <br>
+                                            <span class="fw-bold 
+                                                                        @if ($order->status == 'Lunas') text-success 
+                                                                        @elseif ($order->status == 'Dibatalkan') text-danger 
+                                                                        @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Baru (Menunggu Konfirmasi)') text-info 
+                                                                        @else text-primary 
+                                                                        @endif">
+                                                Status: {{ $order->status }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li>
+                                        <span class="dropdown-item text-muted">Belum ada pesanan terbaru.</span>
+                                    </li>
+                                @endforelse
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="/setting">
+                                        Pengaturan
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item text-danger bg-warning" href="{{ route('logout') }}">Keluar</a>
+                                </li>
+                            @else
+                                <li><a class="dropdown-item text-black bg-warning" href="{{ route('login') }}">Login</a>
+                                </li>
+                                <li><a class="dropdown-item text-black bg-warning"
+                                        href="{{ route('register') }}">Register</a></li>
+                            @endauth
                         </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section style="margin-top: 120px;" class="about-hero">
-        <h1>Tentang Warung Saya</h1>
-        <p>Warung makan tradisional dengan cita rasa istimewa</p>
-        <div class="stats">
+        <h1 data-aos="fade-up">Tentang Warung Saya</h1>
+        <p data-aos="fade-up" data-aos-delay="100">Warung makan tradisional dengan cita rasa istimewa</p>
+        <div class="stats" data-aos="fade-up" data-aos-delay="200">
             <div class="stat-item">
                 <span class="material-symbols-outlined">groups</span>
                 <h4>100+</h4>
@@ -202,16 +270,15 @@
         </div>
     </section>
 
-    <!-- Cerita Kami -->
     <section class="container my-5">
-        <h2 class="section-title">Cerita Kami</h2>
-        <div class="underline"></div>
-        <p class="text-center mx-auto" style="max-width: 750px;">
+        <h2 class="section-title" data-aos="fade-right">Cerita Kami</h2>
+        <div class="underline" data-aos="zoom-in"></div>
+        <p class="text-center mx-auto" style="max-width: 750px;" data-aos="fade-up">
             Warung Saya didirikan dengan semangat untuk menyajikan hidangan rumahan berkualitas tinggi dengan harga
             terjangkau.
             Setiap menu kami dibuat dari bahan-bahan segar pilihan dan resep turun-temurun.
         </p>
-        <p class="text-center mx-auto" style="max-width: 750px;">
+        <p class="text-center mx-auto" style="max-width: 750px;" data-aos="fade-up" data-aos-delay="100">
             Kami bangga melayani komunitas lokal dengan hidangan lezat yang mengingatkan pelanggan akan masakan rumah.
             Dari Nasi Goreng Spesial yang terkenal hingga Soto Ayam yang menghangatkan, setiap hidangan dibuat dengan
             cinta dan dedikasi.
@@ -219,19 +286,20 @@
     </section>
 
     <section class="py-5 text-center">
-        <h2 class="fw-bold mb-3" style="color:#a14f00;">Apa Kata Pelanggan</h2>
-        <div class="underline mx-auto mb-4" style="width:70px;height:4px;background:#a14f00;border-radius:2px;"></div>
+        <h2 class="fw-bold mb-3" style="color:#a14f00;" data-aos="fade-down">Apa Kata Pelanggan</h2>
+        <div class="underline mx-auto mb-4" style="width:70px;height:4px;background:#a14f00;border-radius:2px;"
+            data-aos="zoom-in"></div>
 
         <div class="container">
             <div class="row g-4 justify-content-center">
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-right">
                     <div class="p-4 border rounded-4 shadow-sm bg-white">
                         <p>"Makanannya enak banget, bener-bener kayak di rumah sendiri. Pelayanannya cepat dan ramah!"
                         </p>
                         <h6 class="fw-semibold mt-3">— Dwi Anjani</h6>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4" data-aos="fade-left">
                     <div class="p-4 border rounded-4 shadow-sm bg-white">
                         <p>"GusWarung beneran beda, suasananya hangat dan modern. Favoritku: Nasi Goreng Spesial!"</p>
                         <h6 class="fw-semibold mt-3">— Fajar Rahman</h6>
@@ -241,10 +309,10 @@
         </div>
     </section>
 
-    <!-- Video Iklan GusWarung -->
     <section class="video-section text-center my-5">
-        <h2 class="fw-bold mb-3" style="color:#a14f00;">Profil Usaha GusWarung</h2>
-        <div class="underline mx-auto mb-4" style="width:70px;height:4px;background:#a14f00;border-radius:2px;"></div>
+        <h2 class="fw-bold mb-3" style="color:#a14f00;" data-aos="fade-down">Profil Usaha GusWarung</h2>
+        <div class="underline mx-auto mb-4" style="width:70px;height:4px;background:#a14f00;border-radius:2px;"
+            data-aos="zoom-in"></div>
 
         <div class="container">
             <div class="d-flex justify-content-center" data-aos="zoom-in">
@@ -261,31 +329,30 @@
         </div>
     </section>
 
-    <!-- Hubungi Kami -->
     <section class="container my-5">
-        <h2 class="section-title">Hubungi Kami</h2>
-        <div class="underline"></div>
+        <h2 class="section-title" data-aos="fade-right">Hubungi Kami</h2>
+        <div class="underline" data-aos="zoom-in"></div>
 
         <div class="row justify-content-center">
-            <div class="col-md-3 col-sm-6 contact-card">
+            <div class="col-md-3 col-sm-6 contact-card" data-aos="fade-up" data-aos-delay="100">
                 <span class="material-symbols-outlined mb-2">location_on</span>
                 <h5>Lokasi</h5>
                 <p>Jl. Raya Kendung No 70, Benowo<br>Surabaya</p>
             </div>
 
-            <div class="col-md-3 col-sm-6 contact-card">
+            <div class="col-md-3 col-sm-6 contact-card" data-aos="fade-up" data-aos-delay="200">
                 <span class="material-symbols-outlined mb-2">call</span>
                 <h5>Kontak</h5>
                 <p>+62 812 3456 7890<br><span class="text-success fw-semibold">WhatsApp tersedia</span></p>
             </div>
 
-            <div class="col-md-3 col-sm-6 contact-card">
+            <div class="col-md-3 col-sm-6 contact-card" data-aos="fade-up" data-aos-delay="300">
                 <span class="material-symbols-outlined mb-2">schedule</span>
                 <h5>Jam Buka</h5>
                 <p>Setiap Hari<br><strong>05:30 - 15:00</strong></p>
             </div>
 
-            <div class="col-md-3 col-sm-6 contact-card">
+            <div class="col-md-3 col-sm-6 contact-card" data-aos="fade-up" data-aos-delay="400">
                 <span class="material-symbols-outlined mb-2">mail</span>
                 <h5>Email</h5>
                 <p>GusWarung@warungsaya.com<br>GusWarung@warungsaya.com</p>
@@ -301,7 +368,6 @@
           gap: 40px;
           text-align: left;
         ">
-            <!-- Kolom 1 -->
             <div style="max-width: 300px">
                 <h3 style="color: #ffb703">GUSWarung</h3>
                 <p style="color: #ccc">
@@ -310,7 +376,6 @@
                 </p>
             </div>
 
-            <!-- Kolom 2 -->
             <div>
                 <h3 style="color: #ffb703">Menu</h3>
                 <a href="#" style="color: #ccc; text-decoration: none">Beranda</a><br />
@@ -318,7 +383,6 @@
                 <a href="#" style="color: #ccc; text-decoration: none">Kontak</a><br />
             </div>
 
-            <!-- Kolom 3 -->
             <div>
                 <h3 style="color: #ffb703">Ikuti Kami</h3>
                 <div class="social-icons" style="margin-top: 10px">
@@ -336,8 +400,10 @@
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
     AOS.init({
-        duration: 1000,  /* durasi animasi 1 detik */
-        once: true,      /* animasi hanya muncul sekali */
+        duration: 1000,
+        /* durasi animasi 1 detik */
+        once: true,
+        /* animasi hanya muncul sekali */
         easing: 'ease-in-out'
     });
 </script>

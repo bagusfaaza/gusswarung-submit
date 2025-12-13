@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SesiController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\InventarisController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\OrderManagementController; // 💡 Pastikan Anda menggunakan nama controller ini!
 
@@ -20,6 +22,7 @@ Route::post('/', [SesiController::class, 'login']);
 Route::get('/register', [SesiController::class, 'formRegister'])->name('register');
 Route::post('/register', [SesiController::class, 'register'])->name('register.action');
 Route::get('/logout', [SesiController::class, 'logout'])->name('logout');
+
 
 
 /*
@@ -44,10 +47,12 @@ Route::middleware(['admin'])->group(function () {
         Route::delete('/{menu}', 'destroy')->name('destroy');
     });
 
-    // 3. Manajemen Stok (Perbaiki URL prefix untuk konsistensi)
-    Route::get('/admin/stock', function () {
-        return view('inventaris'); // Ganti dengan controller jika ada logika data
-    })->name('admin.stock.index');
+     // 3. Manajemen Stok (Perbaiki URL prefix untuk konsistensi)
+    Route::get('/admin/stock', [InventarisController::class, 'index'])->name('admin.stock.index');
+    Route::post('/stock/simpan', [InventarisController::class, 'store'])->name('stok.simpan');
+    Route::post('/stock/update', [InventarisController::class, 'update'])->name('stok.update');
+    Route::delete('/stock/hapus/{id}', [InventarisController::class, 'destroy'])->name('stok.hapus');
+
 
     // 4. ✨ ROUTE BARU: Kelola Pesanan & Pembayaran (Menggunakan Resource)
     Route::resource('admin/orders', App\Http\Controllers\Admin\OrderManagementController::class)
@@ -95,5 +100,14 @@ Route::middleware(['user'])->group(function () {
 | ... (Tidak berubah)
 */
 Route::get('/about', function () {
-    return view('about');
+    return view('userabout');
 });
+Route::get('/ganti-profil', function () {
+    return view('gantiprofil');
+});
+
+
+
+Route::get('/profile/edit', [ProfilController::class, 'edit'])->name('profile.edit');
+
+Route::post('/profile/update', [ProfilController::class, 'update'])->name('profile.update');

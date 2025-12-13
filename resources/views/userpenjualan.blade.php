@@ -300,7 +300,7 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="#">Home</a>
+                        <a class="nav-link text-black" href="/user">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-black active" href="/sell">Penjualan</a>

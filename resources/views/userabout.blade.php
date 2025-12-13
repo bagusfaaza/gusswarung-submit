@@ -154,9 +154,9 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link text-black" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link text-black" href="/user">Home</a></li>
                     <li class="nav-item"><a class="nav-link text-black" href="/sell">Penjualan</a></li>
-                    <li class="nav-item"><a class="nav-link text-black active" href="/about">About</a></li>
+                    <li class="nav-item"><a class="nav-link text-black active" href="/userabout">About</a></li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
                             aria-expanded="false">

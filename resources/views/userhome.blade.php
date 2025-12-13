@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" />
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
@@ -570,6 +572,47 @@
                 text-align: center;
             }
         }
+
+        /* Parent submenu container */
+        .dropdown-submenu {
+            position: relative;
+        }
+
+        /* Submenu hidden awal */
+        .submenu-list {
+            display: none;
+            position: relative;
+            background-color: #ffc107 !important;
+            border-radius: 6px;
+            margin-top: 5px;
+            /* supaya tidak menutupi tombol logout */
+            padding: 5px 0;
+        }
+
+        /* item styling */
+        .dropdown-item {
+            padding: 8px 15px;
+        }
+
+        .submenu-list .dropdown-item:hover {
+            background-color: #f1b700;
+        }
+
+        .toggle-submenu {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .toggle-submenu .arrow {
+            transition: transform 0.2s ease;
+        }
+
+        /* panah berputar ketika submenu terbuka */
+        .toggle-submenu.open .arrow {
+            transform: rotate(180deg);
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
@@ -613,18 +656,26 @@
                             <span class="material-symbols-outlined align-middle">account_circle</span>
                         </a>
                         <ul class="dropdown-menu bg-warning">
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="/setting">
-                                    Pengaturan
+
+                            <li class="dropdown-submenu">
+                                <a class="dropdown-item toggle-submenu">
+                                    Pengaturan <i class="fa-solid fa-chevron-down ms-2 arrow"></i>
                                 </a>
+
+                                <ul class="submenu" style="display: none;">
+                                    <li><a class="dropdown-item" href="/ganti-profil">Akun</a></li>
+                                    <li><a class="dropdown-item" href="/setting/notifikasi">Notifikasi</a></li>
+                                </ul>
+
                             </li>
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                            </li>
+
                             <li>
                                 <a class="dropdown-item text-danger bg-warning" href="logout">Keluar</a>
                             </li>
+
                         </ul>
+
+
                     </li>
                 </ul>
             </div>
@@ -990,6 +1041,58 @@
         </div>
     </footer>
     <!-- Akhir hero sectiom -->
+
+
+    <script>
+        document.querySelectorAll('.dropdown-submenu > a').forEach((el) => {
+            el.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+
+                let parent = this.parentElement;
+
+                // Tutup submenu lainnya
+                document.querySelectorAll('.dropdown-submenu').forEach((item) => {
+                    if (item !== parent) item.classList.remove('show');
+                });
+
+                // Toggle submenu
+                parent.classList.toggle('show');
+            });
+        });
+
+        // Tutup submenu saat dropdown utama ditutup
+        document.querySelectorAll('.dropdown').forEach((el) => {
+            el.addEventListener('hidden.bs.dropdown', function () {
+                document.querySelectorAll('.dropdown-submenu').forEach((item) => {
+                    item.classList.remove('show');
+                });
+            });
+        });
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const toggles = document.querySelectorAll(".toggle-submenu");
+
+            toggles.forEach(toggle => {
+                toggle.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    let submenu = this.nextElementSibling;
+
+                    // Toggle show/hide
+                    if (submenu.style.display === "block") {
+                        submenu.style.display = "none";
+                    } else {
+                        submenu.style.display = "block";
+                    }
+                });
+            });
+        });
+    </script>
+
+
+
+
 </body>
 
 </html>

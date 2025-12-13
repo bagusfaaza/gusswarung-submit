@@ -110,13 +110,13 @@
                     <h1 class="login-title">Gus Warung</h1>
                     <h3 class="text-center mb-4">Login</h3>
                     @if($errors->any())
-                    <div class="alert danger">
-                        <ul>
-                            @foreach($errors->all() as $item)
-                            <li>{{ $item }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
+                        <div class="alert danger">
+                            <ul>
+                                @foreach($errors->all() as $item)
+                                    <li>{{ $item }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
                     @endif
                     <form action="" method="POST">
                         @csrf
@@ -135,7 +135,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">email</label>
-                            <input type="email" value ="{{ old('email') }}" name="email" class="form-control" placeholder="Masukkan email">
+                            <input type="email" value="{{ old('email') }}" name="email" class="form-control"
+                                placeholder="Masukkan email">
                         </div>
 
                         <div class="mb-3">

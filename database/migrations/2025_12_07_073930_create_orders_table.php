@@ -30,7 +30,7 @@ return new class extends Migration {
 
             // Status pesanan. Default 'Menunggu Pembayaran'
             $table->string('status')->default('Menunggu Pembayaran');
-
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('set null'); // Cara modern Laravel
             $table->timestamps();
         });
     }

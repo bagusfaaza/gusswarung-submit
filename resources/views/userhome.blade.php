@@ -669,7 +669,6 @@
                     </li>
 
                     <li class="nav-item dropdown">
-<<<<<<< HEAD
 
                         <a class="nav-link dropdown-toggle text-black d-flex align-items-center position-relative"
                             href="#" role="button" data-bs-toggle="dropdown">
@@ -713,65 +712,20 @@
                                             Pesanan #{{ $order->id }} ({{ $order->created_at->format('d/m') }})
                                             <br>
                                             {{-- LOGIKA WARNA STATUS --}}
-                                            <span class="fw-bold
-                                                                                                    @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
-                                                                                                    @elseif ($order->status == 'Dibatalkan') text-danger
-                                                                                                    @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
-                                                                                                    @else text-primary
-                                                                                                    @endif">
-=======
-                        <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-
-                            {{-- ICON ACCOUNT CIRCLE DULU --}}
-                            <span class="material-symbols-outlined align-middle me-1">account_circle</span>
-
-                            @auth
-                                {{-- NAMA PENGGUNA SETELAH IKON --}}
-                                <span class="align-middle fw-bold me-1">{{ Auth::user()->name }}</span>
-                            @endauth
-
-                        </a>
-                        <ul class="dropdown-menu bg-warning">
-                            {{-- Dropdown Menu (Tidak perlu diubah) --}}
-                            @auth
-                                <li>
-                                    <span class="dropdown-item text-white bg-warning fw-bold border-bottom mb-2">
-                                        Masuk sebagai: {{ Auth::user()->name }}
-                                    </span>
-                                </li>
-
-                                {{-- FITUR BARU: STATUS PESANAN TERBARU --}}
-                                <li>
-                                    <h6 class="dropdown-header">Status Pesanan Terbaru</h6>
-                                </li>
-
-                                @forelse($latestOrders as $order)
-                                    <li>
-                                        {{-- PENTING: Untuk sementara diarahkan ke route Admin, idealnya perlu route User order
-                                        show --}}
-                                        <a class="dropdown-item small" href="{{ route('admin.orders.show', $order->id) }}"
-                                            style="line-height: 1.2;">
-                                            Pesanan #{{ $order->id }} ({{ $order->created_at->format('d/m') }})
-                                            <br>
-                                            <span class="fw-bold 
-                                                                                        @if ($order->status == 'Lunas') text-success 
-                                                                                        @elseif ($order->status == 'Dibatalkan') text-danger 
-                                                                                        @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Baru (Menunggu Konfirmasi)') text-info 
-                                                                                        @else text-primary 
-                                                                                        @endif">
->>>>>>> 3b756764ed2f8f5cecc4df4c83e18326e90bb3d9
+                                            <span
+                                                class="fw-bold
+                                                                                                                                    @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
+                                                                                                                                    @elseif ($order->status == 'Dibatalkan') text-danger
+                                                                                                                                    @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
+                                                                                                                                    @else text-primary
+                                                                                                                                    @endif">
                                                 Status: {{ $order->status }}
                                             </span>
                                         </a>
                                     </li>
                                 @empty
                                     <li>
-<<<<<<< HEAD
                                         <span class="dropdown-item text-muted small">Belum ada pesanan terbaru.</span>
-=======
-                                        <span class="dropdown-item text-muted">Belum ada pesanan terbaru.</span>
->>>>>>> 3b756764ed2f8f5cecc4df4c83e18326e90bb3d9
                                     </li>
                                 @endforelse
 
@@ -780,7 +734,6 @@
                                 </li>
 
                                 <li>
-<<<<<<< HEAD
                                     <a class="dropdown-item" href="/ganti-profil">
                                         <span
                                             class="material-symbols-outlined align-middle small me-1">manage_accounts</span>
@@ -796,19 +749,6 @@
 
                             @else
                                 {{-- Jika belum login --}}
-=======
-                                    <a class="dropdown-item text-white bg-warning" href="/setting">
-                                        Pengaturan
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item text-danger bg-warning" href="{{ route('logout') }}">Keluar</a>
-                                </li>
-                            @else
->>>>>>> 3b756764ed2f8f5cecc4df4c83e18326e90bb3d9
                                 <li><a class="dropdown-item text-black bg-warning" href="{{ route('login') }}">Login</a>
                                 </li>
                                 <li><a class="dropdown-item text-black bg-warning"
@@ -1262,10 +1202,6 @@
             });
         });
     </script>
-
-
-
-
 </body>
 
 </html>

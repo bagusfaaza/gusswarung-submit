@@ -9,7 +9,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        /* CSS yang Anda berikan sebelumnya */
         body {
             margin: 0;
             height: 100vh;
@@ -18,6 +17,7 @@
             background-color: #f7f7f7;
         }
 
+        /* Left Image Section */
         .left-images {
             height: 100vh;
             padding: 20px;
@@ -31,6 +31,7 @@
             border-radius: 14px;
         }
 
+        /* Right Login Section */
         .right-login {
             background: #fff;
             display: flex;
@@ -74,6 +75,7 @@
             cursor: pointer;
         }
 
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
             .left-images {
                 display: none;
@@ -96,19 +98,19 @@
     <div class="container-fluid h-100">
         <div class="row h-100">
 
+            <!-- Left Image Section -->
             <div class="col-md-7 left-images">
-                <img src="{{ asset('img/gambar-login.png') }}" alt="food-image">
+                <!-- Satu gambar besar -->
+                <img src="img/gambar-login.png" alt="food-image"> <!-- Ganti gambar sesuai kebutuhan -->
             </div>
 
+            <!-- Right Login Section -->
             <div class="col-md-5 right-login">
                 <div class="login-box">
                     <h1 class="login-title">Gus Warung</h1>
                     <h3 class="text-center mb-4">Login</h3>
-
-                    {{-- Menampilkan Error Validasi atau Gagal Login --}}
                     @if($errors->any())
-                        <div class="alert alert-danger">
-                            {{-- PERBAIKAN: Menggunakan alert alert-danger --}}
+                        <div class="alert danger">
                             <ul>
                                 @foreach($errors->all() as $item)
                                     <li>{{ $item }}</li>
@@ -116,54 +118,26 @@
                             </ul>
                         </div>
                     @endif
-
-                    {{-- Menampilkan Pesan Success --}}
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    {{-- PERBAIKAN: Form action diarahkan ke route login.action --}}
-                    <form action="{{ route('login.action') }}" method="POST">
+                    <form action="" method="POST">
                         @csrf
-
-                        {{-- FIELD ROLE - Diaktifkan kembali --}}
                         <div class="mb-3">
                             <label class="form-label">Pilih Role</label>
-                            <select class="form-select @error('role') is-invalid @enderror" name="role" required>
-                                <option value="" disabled selected>Pilih Role Anda</option>
-                                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
-                                <option value="driver" {{ old('role') == 'driver' ? 'selected' : '' }}>Driver</option>
+                            <select class="form-select" name="role" required>
+                                <option value="admin">Admin</option>
+                                <option value="user">User</option>
+                                <option value="driver">Driver</option>
                             </select>
-                            @error('role')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
-
-                        {{-- FIELD NAMA - Diaktifkan kembali --}}
                         <div class="mb-3">
-                            <label class="form-label">Nama</label>
-                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                placeholder="Masukkan Nama lengkap" value="{{ old('name') }}" required>
-                            @error('name')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label class="form-label">nama</label>
+                            <input type="text" name="name" class="form-control" placeholder="Masukkan username">
                         </div>
 
-                        {{-- FIELD EMAIL --}}
                         <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input type="email" value="{{ old('email') }}" name="email"
-                                class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan email"
-                                required>
-                            @error('email')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
+                            <label class="form-label">email</label>
+                            <input type="email" value="{{ old('email') }}" name="email" class="form-control"
+                                placeholder="Masukkan email">
                         </div>
-
-                        {{-- FIELD PASSWORD DENGAN TOGGLE (Seperti yang sudah kita buat) --}}
                         <div class="mb-3">
                             <label for="passwordInput" class="form-label">Password</label>
                             <div class="input-group">
@@ -181,6 +155,7 @@
                                             d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
                                     </svg>
                                 </button>
+                                {{-- Jika Anda masih ingin menggunakan error validation Laravel --}}
                                 @error('password')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -188,10 +163,9 @@
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
-
                         <div class="d-flex justify-content-between mt-3">
                             <a href="#" class="text-muted">Forgot password?</a>
-                            <a href="{{ route('register') }}" class="text-muted">Sign up</a>
+                            <a href="/register" class="text-muted">Sign up</a>
                         </div>
                     </form>
                 </div>
@@ -202,7 +176,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    {{-- SCRIPT JAVASCRIPT untuk Toggle Password --}}
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const togglePassword = document.getElementById('togglePassword');

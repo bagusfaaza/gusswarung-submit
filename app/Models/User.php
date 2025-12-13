@@ -50,10 +50,4 @@ class User extends Authenticatable
         // Pastikan Anda telah mengimpor Order Model di atas: use App\Models\Order;
         return $this->hasMany(\App\Models\Order::class);
     }
-
-    public function orders()
-    {
-        // Pastikan Anda telah mengimpor Order Model di atas: use App\Models\Order;
-        return $this->hasMany(\App\Models\Order::class);
-    }
 }

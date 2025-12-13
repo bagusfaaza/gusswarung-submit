@@ -105,6 +105,7 @@ Route::middleware(['user'])->group(function () {
 */
 Route::get('/about', function () {
     return view('userabout');
+<<<<<<< HEAD
 });
 Route::get('/ganti-profil', function () {
     return view('gantiprofil');
@@ -115,3 +116,6 @@ Route::get('/ganti-profil', function () {
 Route::get('/profile/edit', [ProfilController::class, 'edit'])->name('profile.edit');
 
 Route::post('/profile/update', [ProfilController::class, 'update'])->name('profile.update');
+=======
+});
+>>>>>>> 3b756764ed2f8f5cecc4df4c83e18326e90bb3d9

@@ -20,8 +20,8 @@
             <a href="{{ route('admin.orders.index') }}" class="list-group-item list-group-item-action fw-bold">
                 <i class="fas fa-list-alt me-2"></i> Kelola Pesanan & Pembayaran ✨ **BARU**
             </a>
-            <a href="#" class="list-group-item list-group-item-action text-muted">
-                <i class="fas fa-chart-line me-2"></i> Cetak Laporan (Nanti)
+            <a href="{{ route('admin.report') }}" class="list-group-item list-group-item-action text-muted">
+                <i class="fas fa-chart-line me-2"></i> Cetak Laporan
             </a>
         </div>
         <div class="mt-4">

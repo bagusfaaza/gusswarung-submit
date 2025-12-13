@@ -22,6 +22,7 @@ Route::post('/', [SesiController::class, 'login']);
 Route::get('/register', [SesiController::class, 'formRegister'])->name('register');
 Route::post('/register', [SesiController::class, 'register'])->name('register.action');
 Route::get('/logout', [SesiController::class, 'logout'])->name('logout');
+Route::post('/login', [SesiController::class, 'login'])->name('login.action');
 
 
 
@@ -47,7 +48,7 @@ Route::middleware(['admin'])->group(function () {
         Route::delete('/{menu}', 'destroy')->name('destroy');
     });
 
-     // 3. Manajemen Stok (Perbaiki URL prefix untuk konsistensi)
+    // 3. Manajemen Stok (Perbaiki URL prefix untuk konsistensi)
     Route::get('/admin/stock', [InventarisController::class, 'index'])->name('admin.stock.index');
     Route::post('/stock/simpan', [InventarisController::class, 'store'])->name('stok.simpan');
     Route::post('/stock/update', [InventarisController::class, 'update'])->name('stok.update');
@@ -64,7 +65,7 @@ Route::middleware(['admin'])->group(function () {
     // 5. Rute Admin Lain
     Route::get('/admin/report', function () {
         return view('laporan');
-    });
+    })->name('admin.report');
     Route::get('/admin/setting', function () {
         return view('pengaturan');
     });
@@ -91,10 +92,13 @@ Route::middleware(['user'])->group(function () {
         return view('keranjang');
     })->name('user.checkout');
     Route::post('/checkout/place-order', [\App\Http\Controllers\OrderController::class, 'placeOrder'])->name('user.place_order');
+
+    Route::get('/orders/{order}', [\App\Http\Controllers\OrderController::class, 'show'])
+        ->name('orders.show'); // Ini adalah nama route yang dicari oleh Blade!
 });
 
 /*
-|--------------------------------------------------------------------------
+|---------------------------------------------- ----------------------------
 | Route Public / General
 |--------------------------------------------------------------------------
 | ... (Tidak berubah)

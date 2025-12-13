@@ -31,7 +31,7 @@
                         <p><strong>Alamat:</strong> {{ $order->customer_address ?? '-' }}</p>
                         <p><strong>Catatan:</strong> {{ $order->notes ?? '-' }}</p>
                         <p class="mt-3"><strong>Waktu Pesan:</strong>
-                            {{ $order->created_at->translatedFormat('d F Y, H:i') }}</p>
+                            {{ $order->created_at->timezone('Asia/Jakarta')->translatedFormat('d F Y, H:i') }}</p>
 
                         <h5 class="mt-4 fw-bold">Update Status Pesanan</h5>
 
@@ -106,22 +106,15 @@
 
                     @if ($order->payment_method != 'cash' && $order->payment_proof_path)
                         <div class="mt-2 text-center">
-                            <a href="{{ Storage::url($order->payment_proof_path) }}" target="_blank">
-                                <img src="{{ Storage::url($order->payment_proof_path) }}" alt="Bukti Pembayaran"
+                            {{-- Gunakan asset() karena path di DB sudah menjadi URL publik /uploads/payments/... --}}
+                            <a href="{{ asset($order->payment_proof_path) }}" target="_blank">
+                                <img src="{{ asset($order->payment_proof_path) }}" alt="Bukti Pembayaran"
                                     class="img-fluid rounded mb-2" style="max-height: 300px;">
                             </a>
                             <p class="text-muted mt-2">
                                 Klik gambar untuk melihat bukti pembayaran ukuran penuh.
                             </p>
                         </div>
-                    @elseif ($order->payment_method == 'cash')
-                        <p class="alert alert-info py-2 mt-2">
-                            Pembayaran <b>Tunai (Bayar di Tempat)</b>. Tidak memerlukan bukti bayar.
-                        </p>
-                    @else
-                        <p class="alert alert-danger py-2 mt-2">
-                            Bukti pembayaran belum diunggah oleh pelanggan.
-                        </p>
                     @endif
 
                 </div>

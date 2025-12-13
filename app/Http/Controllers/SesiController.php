@@ -27,61 +27,74 @@ class SesiController extends Controller
 
     /**
      * Memproses permintaan login.
+     * Logika: Memeriksa Email & Password (Auth::attempt), lalu memverifikasi Nama dan Role secara manual.
      */
     function login(Request $request)
     {
-        // 1. Validasi input
+        // 1. Validasi input (Semua field wajib diisi)
         $request->validate(
             [
-                'email' => 'required',
-                'password' => 'required'
+                'name' => 'required',
+                'email' => 'required|email',
+                'password' => 'required',
+                'role' => 'required|in:admin,user,driver',
             ],
             [
+                'name.required' => 'Nama wajib diisi',
                 'email.required' => 'Email wajib diisi',
+                'email.email' => 'Format Email tidak valid',
                 'password.required' => 'Password wajib diisi',
+                'role.required' => 'Role wajib dipilih',
             ]
         );
+        // 
 
-        // 2. Data untuk otentikasi
+        // 2. Data untuk otentikasi standar (Hanya email & password yang bisa di-attempt)
         $infologin = [
             'email' => $request->email,
             'password' => $request->password,
         ];
 
-        // 3. Coba otentikasi
+        // 3. Coba Otentikasi Email & Password
         if (Auth::attempt($infologin)) {
 
-            // Otentikasi Berhasil
-
-            // Ambil data user yang baru login
+            // Otentikasi Email & Password Berhasil.
             $user = Auth::user();
 
-            // Tentukan jalur redirect berdasarkan kolom 'role'
-            if ($user->role === 'admin') {
-                return redirect('/admin');
+            // 4. Periksa Kriteria Tambahan (Nama dan Role)
+            // Kredensial hanya dianggap valid jika Nama dan Role yang diinput
+            // cocok dengan data pengguna yang berhasil diotentikasi.
+            if ($user->name === $request->name && $user->role === $request->role) {
 
-            } else if ($user->role === 'user') {
-                return redirect('/user');
+                // Semua Kriteria (Email, Password, Nama, Role) COCOK
 
-            } else if ($user->role === 'driver') {
-                return redirect('/driver');
-
+                // Tentukan jalur redirect berdasarkan kolom 'role'
+                if ($user->role === 'admin') {
+                    return redirect('/admin');
+                } else if ($user->role === 'user') {
+                    return redirect('/user');
+                } else if ($user->role === 'driver') {
+                    return redirect('/driver');
+                } else {
+                    // Redirect default
+                    return redirect('/dashboard');
+                }
             } else {
-                // Default redirect jika role tidak dikenali
-                return redirect('/dashboard');
+                // Nama atau Role TIDAK COCOK
+                Auth::logout(); // Logout paksa karena kredensial tidak lengkap/salah
+                return redirect()
+                    ->back()
+                    ->withErrors('Kombinasi Nama, Email, Password, dan Role tidak cocok.')
+                    ->withInput();
             }
-
         } else {
 
-            // Otentikasi Gagal
-
-            // PERBAIKAN: Menggunakan helper redirect() tanpa parameter
+            // Otentikasi Email dan Password Gagal
             return redirect()
                 ->back()
-                ->withErrors('Email dan Password yang dimasukkan salah')
+                ->withErrors('Email atau Password yang dimasukkan salah.')
                 ->withInput();
         }
-
     }
 
     /**

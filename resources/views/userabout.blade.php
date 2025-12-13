@@ -1,3 +1,20 @@
+@php
+    use Illuminate\Support\Facades\Auth;
+    use App\Models\Order;
+    use Illuminate\Support\Str; // Tambahkan ini untuk menggunakan Str::contains
+
+    // 1. Logika Pengambilan Data Pesanan di View
+    $latestOrders = collect();
+    $userName = Auth::check() ? Auth::user()->name : null;
+
+    if (Auth::check()) {
+        // Ambil 5 pesanan terbaru milik user yang sedang login
+        $latestOrders = Order::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+    }
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 
@@ -140,41 +157,122 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="fixed-top navbar navbar-expand-lg navbar-custom-shadow" style="background-color: #ffc107">
+    <nav class="fixed-top navbar navbar-expand-lg shadow-lg" style="background-color: #ffc107">
         <div class="container">
-            <a class="navbar-brand text-white fw-bold" href="">
-                <img src="logo/logo_guswarung tb.png" alt="Logo" width="40" height="40" /> GusWarung
+
+            <a class="navbar-brand text-white fw-bold" href="/">
+                <img src="logo/logo_guswarung tb.png" width="40" height="40">
+                GusWarung
             </a>
 
-            <!-- Toggler untuk mobile -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link text-black" href="/user">Home</a></li>
-                    <li class="nav-item"><a class="nav-link text-black" href="/sell">Penjualan</a></li>
-                    <li class="nav-item"><a class="nav-link text-black active" href="/userabout">About</a></li>
+                <ul class="navbar-nav align-items-center">
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="/">Home</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="/sell">Penjualan</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-black" href="/about">About</a>
+                    </li>
+
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-black" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            <span class="material-symbols-outlined align-middle">account_circle</span>
+
+                        <a class="nav-link dropdown-toggle text-black d-flex align-items-center position-relative"
+                            href="#" role="button" data-bs-toggle="dropdown">
+
+                            <span class="material-symbols-outlined me-1">
+                                account_circle
+                            </span>
+
+                            @auth
+                                {{-- BADGE NOTIFIKASI (Jika ada pesanan baru/perubahan status) --}}
+                                @if(isset($newOrdersCount) && $newOrdersCount > 0)
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                        {{ $newOrdersCount }}
+                                        <span class="visually-hidden">New orders</span>
+                                    </span>
+                                @endif
+                                <span class="fw-bold">{{ Auth::user()->name }}</span>
+                            @endauth
                         </a>
-                        <ul class="dropdown-menu bg-warning">
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="/setting">
-                                    Pengaturan
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-white bg-warning" href="#">Profil</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item text-danger bg-warning" href="logout">Keluar</a>
-                            </li>
+
+                        <ul class="dropdown-menu dropdown-menu-end bg-warning">
+
+                            @auth
+                                <li>
+                                    <span class="dropdown-item fw-bold text-black bg-warning border-bottom">
+                                        Masuk sebagai {{ Auth::user()->name }}
+                                    </span>
+                                </li>
+
+                                {{-- 🔔 NOTIFIKASI STATUS PESANAN (TIDAK KE PAGE LAIN) --}}
+                                <li>
+                                    <h6 class="dropdown-header">🔔 Status Pesanan Terbaru</h6>
+                                </li>
+
+                                {{-- Asumsi variabel $latestOrders tersedia dari Controller --}}
+                                @forelse($latestOrders as $order)
+                                    <li>
+                                        <a class="dropdown-item small" href="{{ route('orders.show', $order->id) ?? '#' }}"
+                                            style="line-height: 1.2;">
+                                            Pesanan #{{ $order->id }} ({{ $order->created_at->format('d/m') }})
+                                            <br>
+                                            {{-- LOGIKA WARNA STATUS --}}
+                                            <span class="fw-bold
+                                                                                                            @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
+                                                                                                            @elseif ($order->status == 'Dibatalkan') text-danger
+                                                                                                            @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
+                                                                                                            @else text-primary
+                                                                                                            @endif">
+                                                Status: {{ $order->status }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @empty
+                                    <li>
+                                        <span class="dropdown-item text-muted small">Belum ada pesanan terbaru.</span>
+                                    </li>
+                                @endforelse
+
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item" href="/ganti-profil">
+                                        <span
+                                            class="material-symbols-outlined align-middle small me-1">manage_accounts</span>
+                                        Akun
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a class="dropdown-item text-danger bg-warning" href="{{ route('logout') }}">
+                                        <span class="material-symbols-outlined align-middle small me-1">logout</span> Keluar
+                                    </a>
+                                </li>
+
+                            @else
+                                {{-- Jika belum login --}}
+                                <li><a class="dropdown-item text-black bg-warning" href="{{ route('login') }}">Login</a>
+                                </li>
+                                <li><a class="dropdown-item text-black bg-warning"
+                                        href="{{ route('register') }}">Register</a></li>
+                            @endauth
                         </ul>
+                    </li>
+
+                </ul>
             </div>
         </div>
     </nav>

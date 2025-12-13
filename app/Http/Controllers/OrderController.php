@@ -11,6 +11,7 @@ use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Menu;
+use Illuminate\Support\Facades\Auth;
 
 
 class OrderController extends Controller
@@ -82,7 +83,11 @@ class OrderController extends Controller
 
                 if ($request->hasFile('proof_of_payment')) {
                     // Simpan file bukti bayar
-                    $proofPath = $request->file('proof_of_payment')->store('public/payments');
+                    $path = $request->file('proof_of_payment')->store('payments', 'public_uploads');
+
+                    // 2. Simpan path URL publik lengkap ke database: /uploads/payments/namafileunik.jpg
+                    // Ini penting agar nanti bisa diakses langsung via asset()
+                    $proofPath = '/uploads/' . $path;
                     $status = 'Menunggu Konfirmasi Admin'; // Berubah status jika bukti bayar diupload
                 }
             }
@@ -101,6 +106,7 @@ class OrderController extends Controller
                 'total_amount' => $final_total,
                 'payment_proof_path' => $proofPath,
                 'status' => $status,
+                'user_id' => Auth::id(),
                 // user_id bisa ditambahkan jika Anda melacak user yang login
             ]);
 

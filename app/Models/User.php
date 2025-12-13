@@ -44,4 +44,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function orders()
+    {
+        // Pastikan Anda telah mengimpor Order Model di atas: use App\Models\Order;
+        return $this->hasMany(\App\Models\Order::class);
+    }
 }

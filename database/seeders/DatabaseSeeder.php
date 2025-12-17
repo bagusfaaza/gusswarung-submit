@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             MenuSeeder::class, // <-- Tambahkan baris ini
+            OrderSeeder::class,
+            OrderDetailSeeder::class,
         ]);
     }
 }

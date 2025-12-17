@@ -32,4 +32,16 @@ class Order extends Model
     {
         return $this->hasMany(OrderDetail::class);
     }
+
+    public function orderDetails()
+    {
+        return $this->hasMany(OrderDetail::class);
+    }
+
+
+    // OrderDetail.php
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

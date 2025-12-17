@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SesiController;
 use App\Http\Controllers\ProfilController;
@@ -62,9 +63,8 @@ Route::middleware(['admin'])->group(function () {
     Route::put('admin/orders/{order}/status', [\App\Http\Controllers\Admin\OrderManagementController::class, 'updateStatus'])
         ->name('admin.orders.update_status');
     // 5. Rute Admin Lain
-    Route::get('/admin/report', function () {
-        return view('laporan');
-    })->name('admin.report');
+    Route::get('/admin/report', [ReportController::class, 'index'])
+        ->name('admin.report');
     Route::get('/admin/setting', function () {
         return view('pengaturan');
     });

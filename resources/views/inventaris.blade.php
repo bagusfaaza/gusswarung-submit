@@ -196,6 +196,14 @@
                                 {{ $item->quantity }} <small class="fs-6 text-muted">{{ $item->unit }}</small>
                             </h3>
 
+                            <!-- TANGGAL UPDATE -->
+                            <div style="font-size:12px;" class="d-flex justify-content-between mt-1">
+                                <span>Update:</span>
+                                <span>
+                                    {{ $item->updated_at->format('d M Y') }}
+        </span>
+                            </div>
+
                             <div class="small text-muted mt-auto">
                                 <div class="d-flex justify-content-between">
                                     <span>Min. stok:</span> <strong>{{ $item->minimal_stock }}</strong>

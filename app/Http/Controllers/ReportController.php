@@ -8,7 +8,9 @@ use App\Models\OrderDetail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Expense;
-use App\Models\Menu;
+use App\Models\Inventaris;
+
+
 
 class ReportController extends Controller
 {
@@ -88,8 +90,14 @@ class ReportController extends Controller
         /* =========================================================
          | 7️⃣ DATA INVENTARIS
          ========================================================= */
-        $totalInventaris = Menu::count();
-        $lowStockCount = Menu::where('stok', '<=', 5)->count();
+        $totalInventaris = Inventaris::count();
+
+        $lowStockCount = Inventaris::whereColumn(
+            'quantity',
+            '<=',
+            'minimal_stock'
+        )->count();
+
 
         /* =========================================================
          | 8️⃣ RINGKASAN TRANSAKSI (QTY & TOTAL QTY)

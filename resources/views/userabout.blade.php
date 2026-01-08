@@ -170,7 +170,7 @@
                 <ul class="navbar-nav align-items-center">
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="/">Home</a>
+                        <a class="nav-link text-black" href="/user">Home</a>
                     </li>
 
                     <li class="nav-item">
@@ -178,8 +178,12 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="/about">About</a>
-                    </li>
+    <a class="nav-link text-black {{ request()->routeIs('about') ? 'active fw-bold' : '' }}"
+       href="{{ route('about') }}">
+        About
+    </a>
+</li>
+
 
                     <li class="nav-item dropdown">
 
@@ -227,11 +231,11 @@
                                             {{-- LOGIKA WARNA STATUS --}}
                                             <span
                                                 class="fw-bold
-                                                                                                                            @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
-                                                                                                                            @elseif ($order->status == 'Dibatalkan') text-danger
-                                                                                                                            @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
-                                                                                                                            @else text-primary
-                                                                                                                            @endif">
+                                                                                                                                            @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
+                                                                                                                                            @elseif ($order->status == 'Dibatalkan') text-danger
+                                                                                                                                            @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
+                                                                                                                                            @else text-primary
+                                                                                                                                            @endif">
                                                 Status: {{ $order->status }}
                                             </span>
                                         </a>

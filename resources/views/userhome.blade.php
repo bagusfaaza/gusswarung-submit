@@ -29,7 +29,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('css/style-userhome.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/style-userhome.css') }}">
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -61,8 +61,12 @@
                 <ul class="navbar-nav align-items-center">
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="/">Home</a>
-                    </li>
+    <a class="nav-link text-black {{ request()->routeIs('user.dashboard') ? 'active fw-bold' : '' }}"
+       href="{{ route('user.dashboard') }}">
+        Home
+    </a>
+</li>
+
 
                     <li class="nav-item">
                         <a class="nav-link text-black" href="/sell">Penjualan</a>
@@ -465,13 +469,13 @@
 
                 <!-- Menu Terlaris -->
                 <div class="col-6 col-md-3">
-                    <div class="p-4 bg-white rounded-4 shadow-sm text-center">
-                        <div class="fs-4 fw-bold text-info">
-                            {{ $menuTerlaris ?? 'Belum ada data' }}
-                        </div>
-                        <p class="fw-semibold mt-2">Menu Terlaris 🍜</p>
+                <div class="p-4 bg-white rounded-4 shadow-sm text-center">
+                    <div class="fs-4 fw-bold text-info">
+                        {{ $namaMenuTerlaris }}
                     </div>
+                    <p class="fw-semibold mt-2">Menu Terlaris 🍜</p>
                 </div>
+            </div>
             </div>
         </section>
     </section>

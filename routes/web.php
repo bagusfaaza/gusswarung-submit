@@ -88,7 +88,7 @@ Route::middleware(['user'])->group(function () {
     Route::get('/sell', [MenuController::class, 'penjualan'])->name('user.sell');
     Route::get('/about', function () {
         return view('userabout');
-    });
+    })->name('about');
     Route::get('/checkout', function () {
         return view('keranjang');
     })->name('user.checkout');
@@ -104,9 +104,9 @@ Route::middleware(['user'])->group(function () {
 |--------------------------------------------------------------------------
 | ... (Tidak berubah)
 */
-Route::get('/about', function () {
-    return view('userabout');
-});
+// Route::get('/about', function () {
+//     return view('userabout');
+// });
 Route::get('/ganti-profil', function () {
     return view('gantiprofil');
 });

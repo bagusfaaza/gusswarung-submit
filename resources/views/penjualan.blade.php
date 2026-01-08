@@ -75,8 +75,12 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link text-black" href="/sell">Penjualan</a>
-                    </li>
+    <a class="nav-link text-black {{ request()->routeIs('user.sell') ? 'active fw-bold' : '' }}"
+       href="{{ route('user.sell') }}">
+        Penjualan
+    </a>
+</li>
+
 
                     <li class="nav-item">
                         <a class="nav-link text-black" href="/about">About</a>
@@ -241,7 +245,7 @@
                             </p>
 
                             {{-- Logic Status Stok --}}
-                            @php
+                            <!-- @php
                                 $stokStatus = 'stock-ready';
                                 $stokText = 'Stok: ' . $menu->stok . ' Porsi';
                                 if ($menu->stok < 10 && $menu->stok > 0) {
@@ -253,7 +257,7 @@
                                 }
                             @endphp
 
-                            <div class="stock-info {{ $stokStatus }} mb-2">{{ $stokText }}</div>
+                            <div class="stock-info {{ $stokStatus }} mb-2">{{ $stokText }}</div> -->
 
                             {{-- Logic Harga Diskon --}}
                             @php
@@ -299,16 +303,16 @@
                         : $harga_asli;
 
                     // Logic Status Stok Minuman
-                    $stokStatus = 'stock-ready';
-                    $stokText = 'Stok: ' . $menu->stok . ' Unit'; // Unit untuk minuman
+                    // $stokStatus = 'stock-ready';
+                    // $stokText = 'Stok: ' . $menu->stok . ' Unit'; // Unit untuk minuman
 
-                    if ($menu->stok < 10 && $menu->stok > 0) {
-                        $stokStatus = 'stock-low';
-                        $stokText = 'Stok: ' . $menu->stok . ' Unit (Menipis!)';
-                    } elseif ($menu->stok == 0) {
-                        $stokStatus = 'stock-out';
-                        $stokText = 'Stok: Habis';
-                    }
+                    // if ($menu->stok < 10 && $menu->stok > 0) {
+                    //     $stokStatus = 'stock-low';
+                    //     $stokText = 'Stok: ' . $menu->stok . ' Unit (Menipis!)';
+                    // } elseif ($menu->stok == 0) {
+                    //     $stokStatus = 'stock-out';
+                    //     $stokText = 'Stok: Habis';
+                    // }
                 @endphp
 
                 <div class="col-md-4 menu-item" data-aos="zoom-in" data-kategori="minuman"
@@ -328,9 +332,9 @@
                                 {{ $menu->deskripsi }}
                             </p>
 
-                            <div class="stock-info {{ $stokStatus }} mb-2">
+                            <!-- <div class="stock-info {{ $stokStatus }} mb-2">
                                 {{ $stokText }}
-                            </div>
+                            </div> -->s
 
                             <div class="price-group">
                                 @if ($diskon > 0)
@@ -378,16 +382,16 @@
                         : $harga_asli;
 
                     // Logic Status Stok Add-ons (disamakan stylenya dengan minuman)
-                    $stokStatus = 'stock-ready';
-                    $stokText = 'Stok: ' . $menu->stok . ' Porsi';
+                    // $stokStatus = 'stock-ready';
+                    // $stokText = 'Stok: ' . $menu->stok . ' Porsi';
 
-                    if ($menu->stok < 10 && $menu->stok > 0) {
-                        $stokStatus = 'stock-low';
-                        $stokText = 'Stok: ' . $menu->stok . ' Porsi (Menipis!)';
-                    } elseif ($menu->stok == 0) {
-                        $stokStatus = 'stock-out';
-                        $stokText = 'Stok: Habis';
-                    }
+                    // if ($menu->stok < 10 && $menu->stok > 0) {
+                    //     $stokStatus = 'stock-low';
+                    //     $stokText = 'Stok: ' . $menu->stok . ' Porsi (Menipis!)';
+                    // } elseif ($menu->stok == 0) {
+                    //     $stokStatus = 'stock-out';
+                    //     $stokText = 'Stok: Habis';
+                    // }
                 @endphp
 
                 <div class="col-md-4 menu-item" data-aos="zoom-in" data-kategori="addon"
@@ -407,9 +411,9 @@
                             </p>
 
                             {{-- Stock info (style sama dengan minuman) --}}
-                            <div class="stock-info {{ $stokStatus }} mb-2">
+                            <!-- <div class="stock-info {{ $stokStatus }} mb-2">
                                 {{ $stokText }}
-                            </div>
+                            </div> -->
 
                             <div class="price-group">
                                 @if ($diskon > 0)

@@ -18,7 +18,6 @@ class StatController extends Controller
         // Pelanggan aktif
         $pelangganAktif = User::where('role', 'user')->count();
 
-        // Menu paling sering dijual
         $menuTerlaris = OrderDetail::select('menu_id')
             ->selectRaw('SUM(quantity) as total_terjual')
             ->groupBy('menu_id')
@@ -28,8 +27,10 @@ class StatController extends Controller
         $namaMenuTerlaris = null;
 
         if ($menuTerlaris) {
-            $namaMenuTerlaris = Menu::find($menuTerlaris->menu_id)->nama_menu;
+            $menu = Menu::find($menuTerlaris->menu_id);
+            $namaMenuTerlaris = $menu ? $menu->nama : 'Menu tidak ditemukan';
         }
+
 
         return view('userhome', compact(
             'totalPesanan',

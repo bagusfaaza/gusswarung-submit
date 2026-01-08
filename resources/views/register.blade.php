@@ -32,40 +32,48 @@
                 </div>
             @endif
 
+            <label class="form-label">Nama</label>
             <input type="text" name="name" class="form-control mb-3 @error('name') is-invalid @enderror"
                 placeholder="Nama" value="{{ old('name') }}">
             @error('name')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
 
+            <label class="form-label">Email</label>
             <input type="email" name="email" class="form-control mb-3 @error('email') is-invalid @enderror"
-                placeholder="bebas@role.com" value="{{ old('email') }}">
+                placeholder="nama@example.com" value="{{ old('email') }}">
             @error('email')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
 
             {{-- PERUBAHAN UTAMA: Input Password dengan Toggle --}}
-            <div class="input-group mb-3">
-                <input type="password" name="password" id="passwordInput"
-                    class="form-control @error('password') is-invalid @enderror" placeholder="Password">
-                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                    <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                        class="bi bi-eye-fill" viewBox="0 0 16 16">
-                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
-                        <path
-                            d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
-                    </svg>
-                </button>
+            <div class="mb-3">
+                <label for="passwordInput" class="form-label">Password</label>
+
+                <div class="input-group">
+                    <input type="password" name="password" id="passwordInput"
+                        class="form-control @error('password') is-invalid @enderror" placeholder="Password">
+
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-eye-fill" viewBox="0 0 16 16">
+                            <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
+                            <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8zm8 3.5a3.5 3.5 0 1 0 0-7
+                    3.5 3.5 0 0 0 0 7z" />
+                        </svg>
+                    </button>
+                </div>
+
                 @error('password')
-                    <div class="invalid-feedback">{{ $message }}</div>
+                    <div class="invalid-feedback d-block">{{ $message }}</div>
                 @enderror
             </div>
+
             {{-- AKHIR PERUBAHAN UTAMA --}}
 
+            <label class="form-label">Role</label>
             <select name="role" class="form-control mb-3">
                 <option value="user" {{ old('role') == 'user' ? 'selected' : '' }}>User</option>
-                <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                <option value="driver" {{ old('role') == 'driver' ? 'selected' : '' }}>Driver</option>
             </select>
 
             <button type="submit" class="btn btn-success w-100">Daftar</button>

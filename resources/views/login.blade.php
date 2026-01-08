@@ -125,7 +125,6 @@
                             <select class="form-select" name="role" required>
                                 <option value="admin">Admin</option>
                                 <option value="user">User</option>
-                                <option value="driver">Driver</option>
                             </select>
                         </div>
                         <div class="mb-3">
@@ -164,7 +163,6 @@
 
                         <button type="submit" class="btn btn-primary w-100 mt-2">Login</button>
                         <div class="d-flex justify-content-between mt-3">
-                            <a href="#" class="text-muted">Forgot password?</a>
                             <a href="/register" class="text-muted">Sign up</a>
                         </div>
                     </form>

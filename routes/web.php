@@ -6,7 +6,9 @@ use App\Http\Controllers\SesiController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\MenuController;
 use App\Http\Controllers\InventarisController;
+use App\Http\Controllers\StatController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\KelolaAkunController;
 use App\Http\Controllers\Admin\OrderManagementController; // 💡 Pastikan Anda menggunakan nama controller ini!
 
 
@@ -23,8 +25,6 @@ Route::post('/', [SesiController::class, 'login']);
 Route::get('/register', [SesiController::class, 'formRegister'])->name('register');
 Route::post('/register', [SesiController::class, 'register'])->name('register.action');
 Route::get('/logout', [SesiController::class, 'logout'])->name('logout');
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -79,9 +79,11 @@ Route::middleware(['admin'])->group(function () {
 */
 Route::middleware(['user'])->group(function () {
 
-    Route::get('/user', function () {
-        return view('userhome');
-    })->name('user.dashboard');
+    // Route::get('/user', function () {
+    //     return view('userhome');
+    // })->name('user.dashboard');
+    Route::get('/user', [StatController::class, 'index'])
+        ->name('user.dashboard');
 
     Route::get('/sell', [MenuController::class, 'penjualan'])->name('user.sell');
     Route::get('/about', function () {
@@ -114,3 +116,20 @@ Route::get('/ganti-profil', function () {
 Route::get('/profile/edit', [ProfilController::class, 'edit'])->name('profile.edit');
 
 Route::post('/profile/update', [ProfilController::class, 'update'])->name('profile.update');
+
+// kelola akun
+Route::middleware(['auth'])->group(function () {
+    Route::get('/admin/management', [KelolaAkunController::class, 'index'])
+        ->name('admin.management');
+
+    Route::post('/admin/store', [KelolaAkunController::class, 'store'])
+        ->name('admin.store');
+
+    Route::post('/admin/update/{id}', [KelolaAkunController::class, 'update'])
+        ->name('admin.update');
+
+    Route::delete('/admin/delete/{id}', [KelolaAkunController::class, 'destroy'])
+        ->name('admin.delete');
+});
+
+

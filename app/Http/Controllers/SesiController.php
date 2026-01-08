@@ -73,8 +73,6 @@ class SesiController extends Controller
                     return redirect('/admin');
                 } else if ($user->role === 'user') {
                     return redirect('/user');
-                } else if ($user->role === 'driver') {
-                    return redirect('/driver');
                 } else {
                     // Redirect default
                     return redirect('/dashboard');

@@ -15,6 +15,7 @@
             ->get();
     }
 @endphp
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,609 +29,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('css/style-userhome.css') }}">
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init();
     </script>
-
-    <style>
-        /* ======= STYLE GLOBAL ======= */
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
-        }
-
-        body {
-            background-color: #fffef8;
-            color: #222;
-        }
-
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        header {
-            width: 100%;
-            padding: 20px 60px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(90deg, #ffb703, #8bc34a);
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .logo {
-            font-weight: 800;
-            font-size: 1.6rem;
-            color: #222;
-        }
-
-        .logo span {
-            color: #ff5722;
-        }
-
-        .navbar-brand {
-            display: flex;
-            align-items: center;
-            /* sejajarkan logo dan teks di tengah vertikal */
-            gap: 10px;
-            /* beri jarak kecil antara logo dan teks */
-        }
-
-        .navbar-brand img {
-            display: inline-block;
-            vertical-align: middle;
-            /* pastikan logo ikut rata tengah */
-            margin-bottom: 0 !important;
-            /* hilangkan offset bawah */
-        }
-
-        .nav-link.active {
-            color: #fff !important;
-            background-color: #e9de08;
-            border-radius: 10px;
-            padding: 8px 16px;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-            transition: all 0.3s ease;
-        }
-
-        /* ======= HERO SECTION ======= */
-
-        .hero {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 60px 80px;
-            background: linear-gradient(120deg, #fff8e1 0%, #f1f8e9 100%);
-        }
-
-        .hero-text {
-            flex: 1;
-        }
-
-        .search-bar {
-            margin-top: 25px;
-            display: flex;
-        }
-
-        .search-bar input {
-            padding: 12px 18px;
-            width: 60%;
-            border: 2px solid #ccc;
-            border-radius: 25px 0 0 25px;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .search-bar button {
-            background-color: #ff5722;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .search-bar button:hover {
-            background-color: #e64a19;
-        }
-
-        .hero-img {
-            flex: 1;
-            text-align: right;
-        }
-
-        .hero-img img {
-            width: 420px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        .hero-scroll {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            width: 100%;
-            height: 100vh;
-            background: #fffef8;
-        }
-
-        .hero-scroll::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .hero-scroll::-webkit-scrollbar-thumb {
-            background: rgba(255, 87, 34, 0.7);
-            border-radius: 10px;
-        }
-
-        /* Tiap slide hero */
-        .hero-slide {
-            flex: 0 0 100%;
-            position: relative;
-            scroll-snap-align: start;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 4rem;
-            color: white;
-            background-color: #111;
-            background-size: cover;
-            background-position: center;
-        }
-
-        .hero-slide:nth-child(1) {
-            background-image: url("img/restoran.jpeg");
-        }
-
-        .hero-slide:nth-child(2) {
-            background-image: url("img/makan-makan.webp");
-        }
-
-        .hero-slide:nth-child(3) {
-            background-image: url("img/dapur.png");
-        }
-
-        /* Transparan overlay di belakang teks */
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(61, 59, 59, 0.466);
-            backdrop-filter: blur(3px);
-            z-index: 0;
-        }
-
-        /* Konten di atas overlay */
-
-        .hero-slide .hero-text,
-        .hero-slide .hero-img {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-slide .hero-text h1 {
-            font-size: 2.8rem;
-            font-weight: 800;
-            line-height: 1.3;
-        }
-
-        .hero-slide .search-bar {
-            margin-top: 25px;
-            display: flex;
-        }
-
-        .hero-slide .search-bar input {
-            padding: 12px 18px;
-            width: 60%;
-            border: 2px solid #ccc;
-            border-radius: 25px 0 0 25px;
-            outline: none;
-            font-size: 1rem;
-        }
-
-        .hero-slide .search-bar button {
-            background-color: #8bc34a;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 0 25px 25px 0;
-            cursor: pointer;
-            font-weight: 600;
-        }
-
-        .hero-slide .search-bar button:hover {
-            background-color: #689f38;
-        }
-
-        .hero-slide .hero-img {
-            flex: 1;
-            text-align: right;
-        }
-
-        .hero-slide .hero-img img {
-            width: 400px;
-            border-radius: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Responsif */
-
-        @media (max-width: 900px) {
-            .hero-slide {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .hero-slide .hero-img {
-                margin-top: 30px;
-            }
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            transition: 0.3s ease;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-        }
-
-        /* ======= CATEGORY ======= */
-
-        .category-card {
-            border-radius: 18px;
-            transition: all 0.3s ease-in-out;
-            background-color: #ffffff;
-        }
-
-        .category-card img {
-            height: 170px;
-
-            object-fit: cover;
-            border-radius: 18px 18px 0 0;
-        }
-
-        .category-card .card-body {
-            padding: 15px;
-            background: #fffef8;
-        }
-
-        .category-card:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            background-color: #f1f8e9;
-        }
-
-        .category-card p {
-            margin: 0;
-            color: #444;
-            font-size: 1.1rem;
-        }
-
-        /* Responsif */
-        @media (max-width: 768px) {
-            .category-card img {
-                height: 140px;
-            }
-
-            .category-card p {
-                font-size: 1rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .category-card img {
-                height: 120px;
-            }
-
-            .category-card p {
-                font-size: 0.95rem;
-            }
-        }
-
-        .categories {
-            padding: 50px 60px;
-            background-color: #fffef8;
-            text-align: center;
-        }
-
-        .categories h2 {
-            font-size: 2rem;
-            color: #222;
-            margin-bottom: 30px;
-        }
-
-        .cat-list {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 25px;
-        }
-
-        .cat-item {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            width: 130px;
-            transition: 0.3s;
-        }
-
-        .cat-item img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .cat-item p {
-            margin-top: 8px;
-            font-weight: 600;
-            color: #444;
-        }
-
-        .cat-item:hover {
-            transform: scale(1.05);
-            background: #f1f8e9;
-        }
-
-        /* ======= POPULAR MENU ======= */
-
-        .popular {
-            padding: 60px 80px;
-            background: linear-gradient(90deg, #fff8e1, #f1f8e9);
-        }
-
-        .popular h2 {
-            text-align: center;
-            font-size: 2rem;
-            margin-bottom: 40px;
-            color: #222;
-        }
-
-        .menu-list {
-            display: flex;
-            justify-content: space-around;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .menu-card {
-            background-color: white;
-            width: 350px;
-            border-radius: 20px;
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            transition: 0.3s;
-        }
-
-        .menu-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .menu-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .menu-card h3 {
-            margin: 15px;
-            font-size: 1.2rem;
-            color: #333;
-        }
-
-        .menu-card p {
-            margin: 0 15px 15px;
-            color: #666;
-            font-size: 0.95rem;
-        }
-
-        .menu-card button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            background: #8bc34a;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 0 0 20px 20px;
-        }
-
-        .menu-card button:hover {
-            background: #7cb342;
-        }
-
-        /* ======= SUBMIT RECIPE ======= */
-
-        .submit-section {
-            padding: 70px 80px;
-            text-align: center;
-        }
-
-        .submit-section h2 {
-            font-size: 2rem;
-            color: #222;
-        }
-
-        .submit-section p {
-            margin: 15px 0;
-            color: #555;
-        }
-
-        .submit-section button {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 25px;
-            background: linear-gradient(90deg, #ff5722, #8bc34a);
-            color: white;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .submit-section button:hover {
-            opacity: 0.9;
-        }
-
-        /* ======= FOOTER ======= */
-
-        footer {
-            background: #222;
-            color: #fff;
-            padding: 50px 80px;
-        }
-
-        footer .footer-content {
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-
-        footer h3 {
-            color: #ffb703;
-            margin-bottom: 15px;
-        }
-
-        footer p,
-        footer a {
-            color: #ccc;
-            font-size: 0.95rem;
-        }
-
-        footer a:hover {
-            color: #ffb703;
-        }
-
-        .social-icons {
-            margin-top: 10px;
-        }
-
-        .social-icons a {
-            margin-right: 15px;
-            color: #ffb703;
-            font-size: 1.3rem;
-        }
-
-        .social-icons a:hover {
-            color: #fff;
-        }
-
-        /* ======= RESPONSIVE ======= */
-
-        @media (max-width: 900px) {
-            .hero {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .hero-img {
-                margin-top: 30px;
-            }
-
-            .menu-list {
-                justify-content: center;
-            }
-        }
-
-        /*STYLE promo */
-
-        .promo-card img {
-            height: 200px;
-            object-fit: cover;
-            border-radius: 12px 12px 0 0;
-        }
-
-        .promo-card {
-            border-radius: 12px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .promo-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-        }
-
-        .promo-card button {
-            border-radius: 25px;
-            transition: 0.3s;
-        }
-
-        .promo-card button:hover {
-            opacity: 0.9;
-        }
-
-        .promo-bestdeal {
-            background: linear-gradient(90deg, #fff8e1 0%, #f1f8e9 100%);
-        }
-
-        .discount-badge {
-            border: 4px solid white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn-success:hover {
-            background-color: #388e3c !important;
-            transform: translateY(-2px);
-            transition: 0.3s;
-        }
-
-        @media (max-width: 768px) {
-            .promo-bestdeal h2 {
-                font-size: 2rem;
-                text-align: center;
-            }
-
-            .promo-bestdeal p {
-                text-align: center;
-            }
-        }
-
-        /* Parent submenu container */
-        .dropdown-submenu {
-            position: relative;
-        }
-
-        /* Submenu hidden awal */
-        .submenu-list {
-            display: none;
-            position: relative;
-            background-color: #ffc107 !important;
-            border-radius: 6px;
-            margin-top: 5px;
-            /* supaya tidak menutupi tombol logout */
-            padding: 5px 0;
-        }
-
-        /* item styling */
-        .dropdown-item {
-            padding: 8px 15px;
-        }
-
-        .submenu-list .dropdown-item:hover {
-            background-color: #f1b700;
-        }
-
-        .toggle-submenu {
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .toggle-submenu .arrow {
-            transition: transform 0.2s ease;
-        }
-
-        /* panah berputar ketika submenu terbuka */
-        .toggle-submenu.open .arrow {
-            transform: rotate(180deg);
-        }
-    </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 
@@ -714,11 +118,11 @@
                                             {{-- LOGIKA WARNA STATUS --}}
                                             <span
                                                 class="fw-bold
-                                                                                                                                    @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
-                                                                                                                                    @elseif ($order->status == 'Dibatalkan') text-danger
-                                                                                                                                    @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
-                                                                                                                                    @else text-primary
-                                                                                                                                    @endif">
+                                                                                                                                                                                                                                    @if ($order->status == 'Lunas' || $order->status == 'Selesai') text-success
+                                                                                                                                                                                                                                    @elseif ($order->status == 'Dibatalkan') text-danger
+                                                                                                                                                                                                                                    @elseif (Str::contains($order->status, 'Menunggu') || $order->status == 'Diproses') text-info
+                                                                                                                                                                                                                                    @else text-primary
+                                                                                                                                                                                                                                    @endif">
                                                 Status: {{ $order->status }}
                                             </span>
                                         </a>
@@ -912,7 +316,7 @@
                 <!-- Card 2 -->
                 <div class="col-6 col-md-3">
                     <div class="card category-card shadow-sm border-0">
-                        <img src="img/bubur ayam.jpg" class="card-img-top" alt="Bubur ayam" />
+                        <img src="img/BuburKomplit.jpg" class="card-img-top" alt="Bubur ayam" />
                         <div class="card-body">
                             <p class="card-text fw-semibold text-dark">Bubur Ayam</p>
                         </div>
@@ -945,7 +349,7 @@
                     pelengkap tradisional yang lezat.
                 </p>
                 <div class="text-center my-3">
-                    <a href="penjualan.html" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
+                    <a href="/sell" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
                         style="max-width: 300px">
                         Pesan Sekarang
                     </a>
@@ -961,7 +365,7 @@
                     disantap kapan saja!
                 </p>
                 <div class="text-center my-3">
-                    <a href="penjualan.html" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
+                    <a href="/sell" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
                         style="max-width: 300px">
                         Pesan Sekarang
                     </a>
@@ -975,7 +379,7 @@
                     matang sempurna dan harum menggoda selera.
                 </p>
                 <div class="text-center my-3">
-                    <a href="penjualan.html" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
+                    <a href="/sell" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
                         style="max-width: 300px">
                         Pesan Sekarang
                     </a>
@@ -1020,7 +424,7 @@
                         menu pilihan hari ini! Cita rasa khas warung dengan potongan harga
                         hingga 50%. Pesan sekarang sebelum kehabisan!
                     </p>
-                    <a href="penjualan.html" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
+                    <a href="/sell" class="btn btn-success fw-semibold shadow-sm w-100 py-3 rounded-pill"
                         style="max-width: 300px">
                         Pesan Sekarang
                     </a>
@@ -1031,17 +435,18 @@
 
     <!-- ======= STATISTIK GUS WARUNG ======= -->
     <section class="stats-section py-5" style="background: linear-gradient(90deg, #fff8e1, #f1f8e9)">
-        <div class="container text-center">
+        <section class="container text-center">
             <h2 class="fw-bold mb-4 text-dark">Gus Warung dalam Angka</h2>
             <p class="text-muted mb-5">
                 Terima kasih telah menjadi bagian dari komunitas kuliner Nusantara 🍽️
             </p>
 
             <div class="row g-4 justify-content-center">
+
                 <!-- Total Pesanan -->
                 <div class="col-6 col-md-3">
                     <div class="p-4 bg-white rounded-4 shadow-sm">
-                        <div class="fs-1 fw-bold text-warning counter" data-target="25430">
+                        <div class="fs-1 fw-bold text-warning counter" data-target="{{ $totalPesanan }}">
                             0
                         </div>
                         <p class="fw-semibold mt-2">Total Pesanan</p>
@@ -1051,71 +456,26 @@
                 <!-- Pelanggan Aktif -->
                 <div class="col-6 col-md-3">
                     <div class="p-4 bg-white rounded-4 shadow-sm">
-                        <div class="fs-1 fw-bold text-success counter" data-target="8200">
+                        <div class="fs-1 fw-bold text-success counter" data-target="{{ $pelangganAktif }}">
                             0
                         </div>
                         <p class="fw-semibold mt-2">Pelanggan Aktif</p>
                     </div>
                 </div>
 
-                <!-- Rating Bintang -->
+                <!-- Menu Terlaris -->
                 <div class="col-6 col-md-3">
-                    <div class="p-4 bg-white rounded-4 shadow-sm">
-                        <div class="fs-1 fw-bold text-info counter" data-target="4.8">
-                            0
+                    <div class="p-4 bg-white rounded-4 shadow-sm text-center">
+                        <div class="fs-4 fw-bold text-info">
+                            {{ $menuTerlaris ?? 'Belum ada data' }}
                         </div>
-                        <p class="fw-semibold mt-2">Rating Rata-rata ⭐</p>
+                        <p class="fw-semibold mt-2">Menu Terlaris 🍜</p>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </section>
 
-    <!-- ======= SCRIPT ANIMASI COUNTER ======= -->
-    <script>
-        // Fungsi animasi angka naik
-        const counters = document.querySelectorAll(".counter");
-        const speed = 150; // kecepatan animasi
-
-        const animateCounters = () => {
-            counters.forEach((counter) => {
-                const updateCount = () => {
-                    const target = +counter.getAttribute("data-target");
-                    const count = +counter.innerText;
-                    const increment = target / speed;
-
-                    if (count < target) {
-                        counter.innerText = Math.ceil(count + increment);
-                        setTimeout(updateCount, 15);
-                    } else {
-                        counter.innerText = target.toLocaleString();
-                    }
-                };
-                updateCount();
-            });
-        };
-
-        // Jalankan animasi hanya saat bagian terlihat di layar
-        let statsSection = document.querySelector(".stats-section");
-        let started = false;
-
-        window.addEventListener("scroll", function () {
-            let sectionTop = statsSection.offsetTop - window.innerHeight + 200;
-            if (!started && window.scrollY > sectionTop) {
-                animateCounters();
-                started = true;
-            }
-        });
-    </script>
-
-    <!-- ======= SUBMIT SECTION ======= -->
-    <section class="submit-section">
-        <h2>Punya Resep Warung Favoritmu?</h2>
-        <p>Bagikan ke komunitas Gus Warung dan jadikan inspirasimu dikenal!</p>
-        <button>Kirim Resep Sekarang</button>
-    </section>
-
-    <!-- ======= FOOTER ======= -->
     <!-- ======= FOOTER ======= -->
     <footer style="background: #222; color: #eee; padding: 60px 20px">
         <div class="footer-content" style="
@@ -1155,6 +515,58 @@
     </footer>
     <!-- Akhir hero sectiom -->
 
+    <!-- ======= SCRIPT ANIMASI COUNTER ======= -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const counters = document.querySelectorAll(".counter");
+            const speed = 150; // kecepatan animasi
+            let started = false;
+
+            if (!counters.length) return;
+
+            const animateCounters = () => {
+                counters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute("data-target"));
+                    let count = 0;
+                    const increment = Math.ceil(target / speed);
+
+                    const updateCount = () => {
+                        if (count < target) {
+                            count += increment;
+                            counter.innerText = count.toLocaleString();
+                            setTimeout(updateCount, 15);
+                        } else {
+                            counter.innerText = target.toLocaleString();
+                        }
+                    };
+
+                    updateCount();
+                });
+            };
+
+            const statsSection = document.querySelector(".stats-section");
+            if (!statsSection) {
+                animateCounters(); // fallback jika section tidak ada
+                return;
+            }
+
+            const checkScroll = () => {
+                const sectionTop = statsSection.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+
+                if (!started && sectionTop < windowHeight - 100) {
+                    animateCounters();
+                    started = true;
+                    window.removeEventListener("scroll", checkScroll);
+                }
+            };
+
+            window.addEventListener("scroll", checkScroll);
+            checkScroll(); // cek saat pertama load (tanpa scroll)
+
+        });
+    </script>
 
     <script>
         document.querySelectorAll('.dropdown-submenu > a').forEach((el) => {

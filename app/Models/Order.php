@@ -28,6 +28,7 @@ class Order extends Model
     /**
      * Relasi ke OrderDetail (satu order memiliki banyak detail)
      */
+
     public function details()
     {
         return $this->hasMany(OrderDetail::class);
